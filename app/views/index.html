@@ -1,0 +1,285 @@
+<div class="container-fluid" ng-controller="DashboardController">
+  <div ng-if="!globals.isAdmin" style="display: inline-block;width: 100%;padding: 10px; background: white;-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);margin-bottom: 10px">
+    <div class="col-md-4" style="border:1px solid #ddd;padding:10px;">
+      <div><input class="form-control hover-text" ng-change="changeOrgName();" ng-model="org.name" style="border-width: 1px !important;"/></div>
+      <div style="color:#9BA2A7;padding:10px 10px 0 10px;font-size: 20px">{{org.code}}</div>
+    </div>
+    <div class="col-md-8" style="padding-left:15px;">
+      <div class="row">
+        <div class="info-tiles tiles-success col-md-3" style="padding-right: 0;margin-bottom: 0">
+          <div class="tiles-heading">
+            <div class="text-center">Notes</div>
+          </div>
+          <div class="tiles-body">
+            <div class="text-center">{{data.notesCount}}</div>
+          </div>
+        </div>
+        <div class="info-tiles tiles-primary col-md-3" style="padding-right: 0;margin-bottom: 0">
+          <div class="tiles-heading">
+            <div class="text-center">Tasks</div>
+          </div>
+          <div class="tiles-body">
+            <div class="text-center">{{data.tasksCount}}</div>
+          </div>
+        </div>
+        <div class="info-tiles tiles-orange col-md-3" style="padding-right: 0;margin-bottom: 0">
+          <div class="tiles-heading">
+            <div class="text-center">Patients</div>
+          </div>
+          <div class="tiles-body">
+            <div class="text-center">{{data.patientsCount}}</div>
+          </div>
+        </div>
+        <a class="info-tiles tiles-midnightblue col-md-3" href="#" ng-click="goTeams($event)" style="padding-right: 0;margin-bottom: 0">
+          <div class="tiles-heading">
+            <div class="text-center">Teams</div>
+          </div>
+          <div class="tiles-body">
+            <div class="text-center">{{data.teamsCount}}</div>
+          </div>
+        </a>
+      </div>      </div>
+  </div>
+    <div class="row" ng-if="globals.isAdmin">
+      <div class="col-md-8 animated-content">
+            <panel panel-class="panel-default no-padding" heading="User Statistics">
+                <panel-controls>
+                    <panel-control-refresh type="circular" is-loading="loadingChartData" ng-click="refreshAction(drp_start, drp_end)"></panel-control-refresh>
+                    <div class="pull-right mr10 hidden-xs">
+                        <button class="btn btn-sm btn-default" style="text-transform: uppercase;" daterangepicker="drp_options" date-begin="drp_start" date-end="drp_end">
+                            <i class="glyphicon glyphicon-calendar"></i> <span style="margin-left: 5px">{{drp_start}} - {{drp_end}}</span> <b class="caret"></b>
+                        </button>
+                    </div>
+                </panel-controls>
+                <div class="p20">
+                    <div class="row">
+                        <div class="col-md-12">
+                           <div id="userGraph" class="" flot-chart style="width: 100%; height:319px"
+                                data-flot-data="plotStatsData"
+                                data-flot-options="plotStatsOptions"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </panel>
+        </div>
+      <div class="col-md-4 animated-content">
+        <div class="row">
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-green" href="#" ng-click="goMonthlyUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Monthly</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.monthlyPaidSubscriptions}}</div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-primary" href="#" ng-click="goAnnualUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Annual</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.annualPaidSubscriptions}}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="info-tiles tiles-orange">
+              <div class="tiles-heading">
+                <div class="text-center">Patients</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.patientsCount}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-midnightblue" href="#" ng-click="goTeams($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Teams</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.teamsCount}}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-success" href="#" ng-click="goUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Users</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.userCount}}</div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-danger" ng-click="goLastMonthActiveUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Last Month Active</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.lastMonthActiveUsers}}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-brown" href="#" ng-click="goLastWeekNewUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Last Week New</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.lastWeekNewUsers}}</div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-grape" href="#" ng-click="goLastWeekActiveUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Last Week Active</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.lastWeekActiveUsers}}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-purple" href="#" ng-click="goLastDayNewUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Last Day New</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.lastDayNewUsers}}</div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xs-6">
+            <a class="info-tiles tiles-indigo" href="#" ng-click="goLastDayActiveUserList($event)">
+              <div class="tiles-heading">
+                <div class="text-center">Last Day Active</div>
+              </div>
+              <div class="tiles-body">
+                <div class="text-center">{{data.lastDayActiveUsers}}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="row" ng-if="!globals.isAdmin">
+    <div class="col-md-12 animated-content">
+      <panel panel-class="panel-default no-padding">
+        <div class="col-sm-12" style="padding-bottom: 20px;">
+          <form class="form-horizontal" name="form.validateForm">
+            <div class="form-group">
+              <label class="col-sm-5 control-label">Contact Email</label>
+              <div class="col-sm-5">
+                <input type="email" class="form-control" ng-model="org.email" ng-change="changeOrgName()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-5 control-label">User Slots</label>
+              <div class="col-sm-5">
+                <span class="form-control no-border">{{org.slotsCount}}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-5 control-label">Subscription Type</label>
+              <div class="col-sm-5">
+                <span class="form-control no-border">{{CommonUtil.getSubscriptionTypeName(currentUser.subscriptionType)}}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-5 control-label">Expiration Date</label>
+              <div class="col-sm-5">
+                <span class="form-control no-border">{{CommonUtil.formatDateWithFormat(currentUser.expirationDate, 'MM/DD/YY HH:mm')}}</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </panel>
+    </div>
+    <!--<div class="col-sm-7">
+      <panel class="panel-default" heading="Users ({{users.length}} of {{org.slotsCount}})">
+        <button class="btn btn-touchround btn-edit pull-right" ng-click="addUser()" ng-disabled="org.slotsCount<=users.length" style="margin-top:-55px">Add</button>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Admin</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="user in users" style="cursor: pointer;">
+            <td>{{user.lastName}}, {{user.firstName}}</td>
+            <td>{{user.username}}</td>
+            <td>
+              <img style="width:26px;" src="assets/img/Checkbox-Complete.png" ng-if="user.isOrgAdmin">
+              <img style="width:26px;" src="assets/img/Checkbox.png"  ng-if="!user.isOrgAdmin">
+            </td>
+            <td>
+              <button class="btn btn-sm btn-red-alt pull-right" ng-click="deleteUser(user)">Remove</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </panel>
+    </div>-->
+  </div>
+  <script type="text/ng-template" id="selectUser.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Select User</h3>
+    </div>
+    <div class="modal-body">
+      <div class="row" style="padding-bottom: 10px;">
+        <div class="col-md-6">
+          <div class="input-icon right">
+            <i class="fa fa-search"></i>
+            <input type="text" ng-model="searchText" class="form-control" placeholder="Search" ng-enter="onSearch()">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div style="width:100%;height:300px;overflow: auto">
+            <table class="table table-hover" style="table-layout: fixed">
+              <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Subscription Type</th>
+                <th class="text-center">Expiration Date</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="item in userList" ng-click="selectUser(item)" style="cursor: pointer;">
+                <td>{{CommonUtil.getFullName(item)}}</td>
+                <td>{{item.username}}</td>
+                <td>{{CommonUtil.getRoleName(item.role)}}</td>
+                <td>{{CommonUtil.getSubscriptionTypeName(item.subscriptionType)}}</td>
+                <td class="text-center"><nobr>{{CommonUtil.formatDateWithFormat(item.expirationDate, 'MM/DD/YY HH:mm')}}</nobr></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-warning" ng-click="close()">Close</button>
+    </div>
+  </script>
+</div> <!-- container-fluid -->

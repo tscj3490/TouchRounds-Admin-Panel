@@ -1,0 +1,662 @@
+.ft10 {font-size:10px;}
+.ft12 {font-size:12px;}
+.ft14 {font-size:14px;}
+
+.red {color:red}
+.black {color:black}
+.white {color:white}
+.grey {color:grey}
+.info-color {color:#1AAFD0 }
+
+textarea {resize:none !important;outline:none !important;}
+input {outline:none !important;}
+
+.pointer {cursor: pointer}
+
+/*body.sidebar-midnightblue #wrapper .static-sidebar-wrapper {
+  background: #393A3C;
+}
+body.sidebar-midnightblue #wrapper .static-sidebar li.active:hover > a, body.sidebar-midnightblue #wrapper .static-sidebar li.active:hover > a > i {
+  color: #ffffff;
+  background: #E97228;
+}
+body.sidebar-midnightblue #wrapper .static-sidebar li.active > a, body.sidebar-midnightblue #wrapper .static-sidebar li.active > a > i {
+  color: #ffffff;
+  background: #E97228;
+}
+
+body.sidebar-midnightblue #wrapper .static-sidebar .nav-separator {
+  background: #000000;
+  color: #737373;
+}*/
+
+body.sidebar-default #wrapper .static-sidebar li.active:hover > a, body.sidebar-default #wrapper .static-sidebar li.active:hover > a > i {
+  color: #ffffff;
+  background: #3F7C95;
+}
+body.sidebar-default #wrapper .static-sidebar li.active > a, body.sidebar-default #wrapper .static-sidebar li.active > a > i {
+  color: #ffffff;
+  background: #3F7C95;
+}
+
+.header-user-name {
+  color: #9BA2A7;
+  margin: 15px 10px;
+  display: inline-block;
+  font-size: 14px;
+}
+
+.header-title {
+  color: black;
+  margin: 12px 10px;
+  display: inline-block;
+  font-size: 18px;
+}
+
+.navbar-brand {
+  font: 0/0 a !important;
+  color: transparent !important;
+  text-shadow: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  background: url("../img/logo_small.png") no-repeat 30px 10px !important;
+  height: 50px !important;
+  width: 190px !important;
+}
+
+.content-title {
+  font-size:28px;
+  font-weight:500;
+  color:#707980;
+}
+
+.patient-task {
+  padding: 7px 10px 7px 10px;
+  border-bottom: 1px solid #E0E0E0 !important;
+  position: relative;
+  font-size: 14px;
+}
+.patient-task.warning-task {
+  background: #EF553A;
+  color:white;
+}
+
+.patient-task.warning-task a {
+  color:white;
+}
+
+.patient-task .notification-icon {
+  width:20px;height:20px;margin-right:5px;margin-top:5px;
+}
+
+.patient-task a {
+  color:#707980;
+}
+.patient-task .header-text {
+  display: inline-block;
+  width: 100%;
+  padding-left: 30px;
+  vertical-align: top;
+}
+
+.patient-task .setting-area {
+  padding:10px;
+  width:100%;
+}
+
+.patient-task .setting-area button {width:100px;}
+
+.btn-login {background: #00B7CE}
+.btn-login:active,.btn-login:focus {background: #00B7CE}
+.btn-login:hover {background: #02C2DA}
+
+table.patient-info-table th {background:#f0f0f0;padding-left:10px !important;padding-right:10px !important;}
+table.patient-info-table td {padding:2px 0 !important;line-height:22px !important;height:29px; /*white-space:pre-wrap;*/}
+table.patient-info-table td textarea {border-width:0;}
+table.patient-info-table td textarea:hover {border-width:1px}
+table.patient-info-table td textarea:focus {border-width:1px}
+.timeline > li .timeline-body {
+  margin: 0 0 20px 14%;
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  position: relative;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.timeline > li .timeline-body span.chat-user-name {
+  margin-left:20px;
+  font-size:12px;
+}
+
+.timeline > li .timeline-header span.date {
+  float: left;
+  font-size:12px;
+}
+
+.task-row {
+
+}
+
+.task-row:hover {background: transparent;border:1px solid #56B3D2; border-width:1px 0 1px 0 !important;}
+.task-row.select {background:#E8F7FB}
+.task-row:hover .patient-task {padding-top:6px;padding-bottom:6px;}
+button.close {
+  font-size: 24px;
+  margin-top: -8px;
+  opacity: 0.5;
+}
+
+.panel {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.btn-touchround {
+  background-color: transparent !important;
+  border-width:1px;
+  padding:0 10px;
+  line-height:28px;
+  font-size:14px;
+  font-weight:500;
+}
+
+.btn-edit {
+  color: #1AAFD0 !important;
+  border-color: #1AAFD0 !important;
+}
+
+.btn-extend {
+  color: orange !important;
+  border-color: orange !important;
+}
+
+.btn-delete {
+  color: red !important;
+  border-color: red !important;
+  background-color: white;
+  webkit-box-shadow: inset 0 0px 0px 1px rgba(255,0,0,0.8);
+  box-shadow: inset 0 0px 0px 1px rgba(255,0,0,0.8)
+}
+
+.btn-setting {
+  color: #1AAFD0 !important;
+  border-color: #1AAFD0 !important;
+  background-color: white;
+  webkit-box-shadow: inset 0 0px 0px 1px #1AAFD0;
+  box-shadow: inset 0 0px 0px 1px #1AAFD0;
+}
+
+.btn-delete-full {
+  color:white !important;
+  border-color: red !important;
+  background-color: red !important;
+}
+
+.btn-patient {
+  background-color: transparent !important;
+  border-width:1px;
+  padding:0 10px;
+  line-height:28px;
+  font-size:14px;
+  font-weight:500;
+}
+
+.btn-patient-edit {
+  color: #1AAFD0 !important;
+  border-color: #1AAFD0 !important;
+}
+
+.btn-patient-discharge {
+  color: orange !important;
+  border-color: orange !important;
+}
+
+.btn-patient-delete {
+  color: red !important;
+  border-color: red !important;
+}
+
+.btn-patient-save {
+  color: white !important;
+  border-color: #1AAFD0 !important;
+  background-color: #1AAFD0 !important;
+}
+
+.btn-patient-save:hover {
+  opacity:0.8;
+}
+
+.btn-task-delete {
+  /*background-color: transparent !important;*/
+  border-width: 1px;
+  padding: 0;
+  line-height: 28px;
+  height: 28px;
+  font-size: 12px;
+  font-weight: 500;
+  color: red !important;
+  border-color: red !important;
+  background-color: white !important;/*rgba(255, 182, 193, 0.6) !important;*/
+  width: 60px;
+  margin-right: 20px;
+}
+
+.btn-patient:hover{
+  opacity:0.8;
+  /*background-color:#f0f0f0 !important;*/
+}
+
+.btn-default2 {
+  background-color: transparent !important;
+  border-width:1px;
+  padding:0 10px;
+  line-height:34px;
+  font-size:14px;
+  font-weight:500;
+  color: #1AAFD0 !important;
+  border-color: #1AAFD0 !important;
+}
+
+.btn-default3 {
+  background-color: white;
+  border-width:1px;
+  line-height:28px;
+  font-size:14px;
+  font-weight:500;
+  color: #1AAFD0 !important;
+  border-color: #1AAFD0 !important;
+  border-radius: 50%;
+  width:28px;
+  height:28px;
+  padding:0;
+  margin-top: 8px;
+}
+
+.btn-default2:hover {
+  border-width:3px;
+  line-height:30px;
+  padding:0 8px;
+}
+
+.btn-default3:hover{
+  font-weight:700;
+}
+
+form .ng-dirty.ng-valid {
+  border: 1px solid #e0e0e0;
+  color: #707980;
+}
+
+.task-detail-title {
+  font-size:36px;
+  font-weight:400;
+  line-height:50px;
+  height:50px;
+  padding:0 10px 0 50px;
+  color:black;
+  border-width:0;
+}
+
+.task-detail-title:hover, .task-detail-title:focus {border-width:1px;}
+.task-detail-buttons {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.task-detail-status {
+  position: absolute;  top: 8px;  left: 5px;  cursor: pointer;  width: 36px;
+}
+
+.task-detail-status-small {
+  cursor: pointer;width:15px;height:15px;
+}
+
+.task-detail-status:hover {
+  color: #a36a29;
+}
+
+a.username img {
+  border-radius: 0;
+}
+
+.panel.panel-primary .panel-heading, accordion.panel-primary .panel-heading {
+  border-color: #1AAFD0;
+}
+
+#sidebar .nav-separator {
+  padding: 10px 16px 7px 16px;
+  font-size: 11px;
+  background: #293136;
+}
+
+.btn-task-detail {
+  height:28px;
+  font-size:12px;
+  background: white;
+}
+
+.btn-task-detail.active {
+  background: #DDDDDD;
+}
+
+.btn-red-alt {
+  color:red !important; /*#fff !important;*/
+  border:1px solid red;
+  background-color:white; /*rgba(247, 43, 74, 0.6) !important;*/
+  opacity: 1;
+  /*background: transparent;*/
+}
+
+.btn-red-alt:hover {
+  opacity: 0.8;
+}
+
+.btn-pink-alt {
+  color:white !important; /*#fff !important;*/
+  border:1px solid red;
+  background-color:#FC91AD; /*rgba(247, 43, 74, 0.6) !important;*/
+  opacity: 1;
+  /*background: transparent;*/
+}
+
+.btn-pink-alt:hover {
+  opacity: 0.8;
+}
+
+.btn-orange-alt {
+  color:orange;
+  border:1px solid orange;
+  background: transparent;
+}
+
+.btn-orange-alt:hover {
+  color: #FF7700;
+  border:1px solid #FF7700;
+  background: transparent;
+}
+
+.editableTD {
+  margin:0 !important;padding:0 !important;border:none;
+}
+
+.editableTD input {
+  margin-top:-1px;
+  border-width:1px 0 0 0;
+  border-color:#e0e0e0;
+}
+
+.editableTD input:hover {
+  border-color:#1AAFD0;
+  border-width:1px 0 1px 0;
+}
+.editableTD input:focus {
+  border-color:#1AAFD0;
+  border-width:1px 0 1px 0;
+  z-index: 100;
+  background:#E8F7FB;
+}
+
+.form-horizontal .control-label, .form-control-static {
+  padding-top: 8px;
+  padding-bottom: 0;
+  font-weight: bold;
+}
+
+.deadline-label {font-size:12px;line-height:24px;padding-right:10px;}
+
+.bubble-left {
+  position: relative;
+  padding: 5px 10px;
+  background: #e0e0e0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  margin-left:25px;
+}
+
+.bubble-left:after {
+  content: "";
+  position: absolute;
+  top: 19px;
+  left: -20px;
+  border-style: solid;
+  border-width: 8px 20px 8px 0;
+  border-color: transparent #e0e0e0;
+  display: block;
+  width: 0;
+  z-index: 1;
+}
+
+.bubble-right {
+  position: relative;
+  padding: 5px 10px;
+  background: #C7E5EA;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  margin-right:25px;
+  text-align:right;
+}
+
+.bubble-right:after {
+  content: "";
+  position: absolute;
+  top: 19px;
+  right: -20px;
+  border-style: solid;
+  border-width: 8px 0 8px 20px;
+  border-color: transparent #C7E5EA;
+  display: block;
+  width: 0;
+  z-index: 1;
+}
+
+#sidebar .sidebar-img-bullet {
+  width:12px;height:12px;margin-right:12px;margin-top:-3px;
+}
+
+#sidebar i {
+  margin-right: 12px;
+}
+
+.bootbox-confirm .btn-primary {
+  color: #ffffff;
+  background-color: #05a7cf;
+  border-color: #0493b6;
+}
+
+.bootbox-confirm .btn-primary:hover {
+  background-color: #0493b6;
+}
+
+/*.btn-touchrounds {
+  color: #0493b6 !important; !*#ffffff !important;*!
+  background-color: white !important; !*#05a7cf;*!
+  box-shadow: inset 0 0px 0px 1px #0493b6 !important;
+  opacity:1;
+}
+
+.btn-touchrounds:hover {
+  opacity:0.8;
+}*/
+
+.stepy-navigator .button-back, .stepy-navigator .button-next {
+  color: #ffffff;
+  background-color: #05a7cf;
+  border-color: #0493b6;
+  margin-left:10px;
+}
+.stepy-navigator .button-back:hover, .stepy-navigator .button-next:hover {
+  background-color: #0493b6;
+}
+
+#page-heading .breadcrumb > li {
+  font-size: 14px !important;
+  line-height: 14px;
+}
+#page-heading a {color:#1AAFD0}
+
+.ui-pnotify-title, .ui-pnotify-icon, .ui-pnotify-sticker, .ui-pnotify-closer {
+  display:none !important;
+}
+
+.printTable {
+  display:inline-flex;width:100%;
+  border-left:1px solid #e0e0e0;
+  page-break-after: always;
+  /*page-break-inside:avoid;*/
+  font-size:10px;
+}
+
+.printTable:last-child {
+  border-bottom:1px solid #e0e0e0;
+}
+.printTable-header {
+  width:20%;float:left;display:inline-block;
+  border-width: 1px 1px 1px 0;
+  border-color: #e0e0e0;
+  border-style: solid;
+  padding: 5px;
+  background: #f0f0f0;
+  page-break-after: always;
+}
+.printTable-cell {
+  width:20%;float:left;display:table-cell;
+  border-width: 1px 1px 1px 0;
+  border-color: #e0e0e0;
+  border-style: solid;
+  padding: 5px;
+  page-break-after: always;
+  page-break-inside:avoid;
+}
+
+.print-task-item {    font-size: 14px; line-height: 14px; padding-right: 5px;}
+
+.print-panel .panel-heading {height:0px !important;}
+
+.print-title {font-size:12px;padding-bottom:5px;}
+
+.archive-task-link {padding-left:30px; font-size: 14px;}
+.archive-task-link a {color:#1AAFD0}
+
+span.time {font-size:11px; font-style: italic;}
+
+.chat-box {height:450px;overflow:auto;border:1px solid #e0e0e0;margin-top:10px;list-style: none;padding:10px;}
+.chat-row {font-size:14px;position:relative;width:100%;padding-bottom:5px;display:inline-block}
+
+.dropdown-menu.invites {
+  padding: 0;
+  z-index: 1300;
+  width: 300px;
+}
+.dropdown-menu.invites .dd-header
+{
+  padding: 5px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.dropdown-menu.invites .invite-item
+{
+  padding: 10px 10px;
+  font-size: 14px;
+  background: #FFFAF0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dropdown-menu.invites .invite-item .msg {   padding-left:5px; width: 140px;  display: inline-block; line-height: 29px;}
+.dropdown-menu.invites .invite-item .time{line-height: 29px;}
+
+.btn-invite {
+  position: absolute;
+  right: 20px;
+  top: 25px;
+  z-index: 100;
+}
+
+body.sidebar-collapsed .static-sidebar-wrapper, body.sidebar-collapsed .static-sidebar-wrapper > div {
+  width: 0px !important;
+}
+
+.btn-expand {
+  width:150px;
+}
+
+.btn-compact {
+  padding-left:10px;
+  padding-right:10px;
+}
+
+tr.patient-list {
+
+}
+
+tr.patient-list.selected {
+  background:#f0f0f0;
+}
+
+body.sidebar-midnightblue #wrapper .static-sidebar .nav-separator {
+  background: #37444E;
+  color: #92a4b2;
+}
+
+a.userlist-header {
+  color: #707980;
+  font-size: 14px;
+}
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+  color: #1AAFD0;
+}
+
+.pagination > li > a, .pagination > li > span {
+  color: #1AAFD0;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+  z-index: 2;
+  color: #fff;
+  background-color: #1AAFD0;
+  border-color: #1AAFD0;
+  cursor: default;
+}
+
+.bootbox .btn-primary {
+  background-color: #1AAFD0 !important;
+  border-color: #1AAFD0 !important;
+}
+
+.bootbox .btn-primary:hover {
+  background-color: #1AAFD0 !important;
+  border-color: #1AAFD0 !important;
+  opacity:0.8;
+}
+
+.no-border {
+  border:none !important;
+}
+
+.hover-text {
+  font-size:24px;
+  font-weight:400;
+  line-height:40px;
+  height:40px;
+  color:black;
+  border-width:0 !important;
+}
+
+.hover-text:hover, .hover-text:focus {border-width:1px !important;}
+
+.hover-text2 {
+  border-width:0 !important;
+}
+
+.hover-text2:hover, .hover-text2:focus {border-width:1px !important;}
+
+#sidebar li a {
+  text-transform: none !important;
+}

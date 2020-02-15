@@ -1,0 +1,196 @@
+<div class="container-fluid"  ng-controller="UserDetailController">
+  <div style="display: inline-block;width: 100%;padding: 20px 20px 15px 20px; background: white;-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);margin-bottom: 10px">
+    <div class="pull-left" style="margin-top: -5px;">
+      <span style="font-size:24px;">{{isNew?'Create User':CommonUtil.getFullName2(user)}}</span>
+    </div>
+    <button class="btn btn-touchround btn-patient-save pull-right" ng-click="saveUserDo()" ng-disabled="!form.validateForm.$valid">Save</button>
+    <div ng-hide="isNew">
+      <button ng-if="globals.isAdmin" class="btn btn-touchround btn-delete pull-right" style="margin-right:10px"  ng-click="deleteUser()">Delete</button>
+      <button ng-if="!globals.isAdmin&&currentUser._id!=userId" class="btn btn-touchround btn-delete pull-right" style="margin-right:10px"  ng-click="removeUser()">Remove from Organization</button>
+      <button ng-if="globals.isAdmin" class="btn btn-touchround btn-extend pull-right" style="margin-right:10px"  ng-click="extendDays()">Extend Expiration</button>
+      <button class="btn btn-touchround btn-edit pull-right" style="margin-right:10px"  ng-click="changePassword()">Change Password</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="{{(isNew||!globals.isAdmin)?'col-md-12':'col-md-10'}}">
+      <div class="panel" style="padding:20px;border-top: 1px solid rgba(0, 0, 0, 0.15);">
+        <form class="form-horizontal"  name="form.validateForm">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Username</label>
+            <div class="col-sm-6" ng-if="!isNew">
+              <div style="margin-top: 7px"><a href="mailTo:{{user.username}}">{{user.username}}</a></div>
+            </div>
+            <div class="col-sm-6" ng-if="isNew">
+              <input type="email" class="form-control" ng-model="user.username" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">First Name</label>
+            <div class="col-sm-6">
+              <input class="form-control" ng-model="user.firstName" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Last Name</label>
+            <div class="col-sm-6">
+              <input class="form-control" ng-model="user.lastName" required>
+            </div>
+          </div>
+          <div class="form-group" ng-if="isNew">
+            <label class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-6">
+              <input type="password" class="form-control" ng-model="user.password" required>
+            </div>
+          </div>
+          <div class="form-group" ng-if="isNew">
+            <label class="col-sm-3 control-label">Confirm Password</label>
+            <div class="col-sm-6">
+              <input type="password" class="form-control" password-verify="user.password" ng-model="user.passwordConfirm" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Role</label>
+            <div class="col-sm-6">
+              <select ng-model="user.role" class="form-control">
+                <option ng-repeat="role in CommonUtil.roleList" value="{{role}}" ng-selected="user.role==role">{{CommonUtil.getRoleName(role)}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" ng-if="globals.isAdmin">
+            <label class="col-sm-3 control-label">Subscription Type</label>
+            <div class="col-sm-6">
+              <select ng-model="user.subscriptionType" class="form-control">
+                <option ng-repeat="plan in CommonUtil.planList" value="{{plan}}" ng-selected="user.subscriptionType==plan">{{CommonUtil.getSubscriptionTypeName(plan)}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" ng-hide="isNew||!globals.isAdmin">
+            <label class="col-sm-3 control-label">Created At</label>
+            <div class="col-sm-6">
+              <input class="form-control" value="{{CommonUtil.formatDateTime(user._bmd.createdAt)}}" readonly>
+            </div>
+          </div>
+          <div class="form-group" ng-if="globals.isAdmin">
+            <label class="col-sm-3 control-label">Subscription Expiration Date</label>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <input type="text" spellcheck="false" class="form-control datepicker" datepicker-popup="MMMM d, yyyy" ng-model="formData.expirationDate" is-open="openedDateSelector[1]" close-text="Close"/>
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="openDateWindow($event, 1)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" ng-hide="isNew||!globals.isAdmin">
+            <label class="col-sm-3 control-label">Last Login</label>
+            <div class="col-sm-6">
+              <input class="form-control" value="{{CommonUtil.formatDateTime(user.lastLoginAt)}}" readonly>
+            </div>
+          </div>
+          <div class="form-group" ng-if="globals.isAdmin">
+            <label class="col-sm-3 control-label">Dev Admin</label>
+            <div class="col-sm-6">
+              <div class="input-group">
+                <input type="checkbox" ng-model="isAdmin" class="js-switch" ui-switch="{color: '#1AAFD0', secondaryColor: '#c5cbd1'}" />
+              </div>
+            </div>
+          </div>
+        </form>
+        <script type="text/ng-template" id="changePassword.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Change Password</h3>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal"  name="form.validateForm">
+              <div class="form-group">
+                <label class="col-sm-3 control-label">New Password</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" name="password" ng-model="user.password" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Confirm Password</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control" password-verify="user.password" ng-model="user.passwordConfirm" required>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" ng-click="close()">Cancel</button>
+            <button class="btn btn-primary" ng-click="changePasswordDo()"  ng-disabled="!canSubmitValidationForm()">Save</button>
+          </div>
+        </script>
+        <script type="text/ng-template" id="extendDays.html">
+          <div class="modal-header">
+            <h3 class="modal-title">Extend Subscription</h3>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal"  name="form.validateForm">
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Days to Extend</label>
+                <div class="col-sm-9">
+                  <input type="number" class="form-control" name="days" ng-model="extendDays" required>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" ng-click="close()">Cancel</button>
+            <button class="btn btn-primary" ng-click="extendDo()"  ng-disabled="!canSubmitValidationForm()">Extend</button>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div class="col-md-2 animated-content" ng-if="!isNew&&globals.isAdmin">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="info-tiles tiles-midnightblue">
+            <div class="tiles-heading">
+              <div class="text-center">Teams #</div>
+            </div>
+            <div class="tiles-body">
+              <div class="text-center">{{data.teamsCount}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="info-tiles tiles-orange">
+            <div class="tiles-heading">
+              <div class="text-center">Patients #</div>
+            </div>
+            <div class="tiles-body">
+              <div class="text-center">{{data.patientsCount}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="info-tiles tiles-primary">
+            <div class="tiles-heading">
+              <div class="text-center">Tasks #</div>
+            </div>
+            <div class="tiles-body">
+              <div class="text-center">{{data.tasksCount}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="info-tiles tiles-success">
+            <div class="tiles-heading">
+              <div class="text-center">Notes #</div>
+            </div>
+            <div class="tiles-body">
+              <div class="text-center">{{data.notesCount}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> <!-- container-fluid -->

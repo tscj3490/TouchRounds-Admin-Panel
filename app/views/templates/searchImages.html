@@ -1,0 +1,68 @@
+<style>
+  .tab-midnightblue.tab-container .tab-content {
+    border: 1px solid #D7d7d7 !important;
+  }
+  .tab-container > .nav-tabs > li.active > a {
+    color: white !important;
+    font-size: 16px;
+    font-weight: bold;
+  }
+</style>
+<div class="modal-header">
+  <h3 class="modal-title">Search Images</h3>
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <tabset tab-theme="midnightblue" tab-position="top">
+      <tab heading="GIFs" ng-click="selectTab(1)">
+        <div style="padding:10px">
+          <div class="input-group mb20">
+            <input type="text" class="form-control" placeholder="Search gifs..." ng-model="searchKey1" id="searchKey1" ng-enter="searchImages(1, searchKey1)">
+				<span class="input-group-btn">
+					<a class="btn btn-default" href="" ng-click="searchImages(1, searchKey1)"><i class="fa fa-fw fa-search"></i></a>
+				</span>
+          </div>
+          <div style="height:500px;overflow: auto;">
+            <div style="display: inline-block">
+              <div ng-repeat="item in searchResults[1]" class="search-result-item">
+                <img ng-src="{{item.images.fixed_height_small.url}}" style="height: 100%" class="pointer" ng-click="selectImage(item)">
+              </div>
+            </div>
+            <div style="text-align: center">
+              <button class="btn btn-default" ng-click="searchImagesMore(1, searchKey1)" ng-show="showLoadMore[0]">Load More</button>
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Pixabay" ng-click="selectTab(2)">
+        <div style="padding:10px">
+          <div class="input-group mb20">
+            <input type="text" class="form-control" placeholder="Search images..." id="searchKey2" ng-model="searchKey2" ng-enter="searchImages(2, searchKey2)">
+				<span class="input-group-btn">
+					<a class="btn btn-default" href="" ng-click="searchImages(2, searchKey2)"><i class="fa fa-fw fa-search"></i></a>
+				</span>
+          </div>
+          <div style="height:500px;overflow: auto;">
+            <div style="display: inline-block">
+              <div ng-repeat="item in searchResults[2]" class="search-result-item">
+                <img ng-src="{{item.previewURL}}" style="height: 100%" class="pointer" ng-click="selectImage(item)">
+              </div>
+            </div>
+            <div style="text-align: center">
+              <button class="btn btn-default" ng-click="searchImagesMore(2, searchKey2)" ng-show="showLoadMore[1]">Load More</button>
+            </div>
+          </div>
+        </div>
+      </tab>
+    </tabset>
+    <img ng-show="hide" id="selectedFile">
+  </div>
+  <div data-ng-show="isDownloading" style="width: 100%; height: 100%; position: absolute; top:0; left:0;background-color: rgba(0, 0, 0, 0.3);z-index: 1000;text-align: center;">
+    <div style="margin-top: 250px">
+      <p style="font-size:20px;color:white"><i class="fa fa-spinner fa-spin"></i> Downloading...</p>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="close()">Close</button>
+</div>

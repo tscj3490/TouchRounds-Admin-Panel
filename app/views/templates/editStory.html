@@ -1,0 +1,108 @@
+<div class="modal-header">
+  <h3 class="modal-title">Edit Story</h3>
+</div>
+<div class="modal-body">
+  <form class="form-horizontal"  name="form.validateForm">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Title</label>
+      <div class="col-sm-9">
+        <input class="form-control" ng-model="story.title" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Subtitle</label>
+      <div class="col-sm-9">
+        <input class="form-control" ng-model="story.subtitle">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Stub</label>
+      <div class="col-sm-9">
+        <input class="form-control" ng-model="story.stub" placeholder="{{CommonUtil.getStubName(story.title)}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Cover Photo</label>
+      <div class="col-sm-9 upload-file-container pointer" ng-click="selectFileOpen('coverPhotoFile', $event)">
+        <div ng-hide="story.coverPhoto" style="height: 120px;" class="drop-container" drag-and-drop drop-handler="onFileUpload(files,'coverPhoto')">
+          <div class="drop-informer" style="position: relative; top: 50%; margin-top: -19px;">
+            Drop image here or <a href="" ng-click="searchImages2($event)">search for one</a>
+          </div>
+        </div>
+        <div ng-show="story.coverPhoto" drag-and-drop drop-handler="onFileUpload(files,'coverPhoto')">
+          <img ng-src="{{CommonUtil.getSmallImage3(story.coverPhoto)}}" class="cover-photo" >
+          <i class="fa fa-2x fa-trash-o pointer" ng-click="deleteFile('coverPhoto', $event)"></i>
+          <input type="file" name="coverPhoto" id="coverPhotoFile" onchange="angular.element(this).scope().onFileUpload(this.files,'coverPhoto');" aria-label="coverPhoto" ng-show="false">
+        </div>
+        <div data-ng-show="isUploading['coverPhoto']" class="file-loading">
+          <div style="margin-top: 70px;">
+            <div class="file-progress">
+              <div class="progress-bar-warning" style="width:{{fileProgress['coverPhoto']}}%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Type</label>
+      <div class="col-sm-9">
+        <!--<select class="form-control" ng-model="story.type" ng-options="item.name for item in storyTypeList track by item._id">
+            <option value="">None</option>
+        </select>-->
+        <ui-select multiple ng-model="storyContentType.selected" close-on-select="false" style="width: 100%;">
+          <ui-select-match placeholder="Select types">{{$select.selected[$index].name}}</ui-select-match>
+          <ui-select-choices repeat="item in storyTypeList | filter: $select.search">
+            <span ng-bind-html="item.name | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Category</label>
+      <div class="col-sm-9">
+        <ui-select multiple ng-model="storyCategory.selected" close-on-select="false" style="width: 100%;">
+          <ui-select-match placeholder="Select categories">{{$select.selected[$index].name}}</ui-select-match>
+          <ui-select-choices repeat="item in contentCategories | filter: $select.search">
+            <span ng-bind-html="item.name | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Publication Date</label>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <input type="text" spellcheck="false" class="form-control datepicker" datepicker-popup="yyyy-MM-dd" ng-model="pubDate" is-open="openedPubDate" close-text="Close"/>
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="openPubDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Sharable</label>
+      <div class="col-sm-9">
+        <input type="checkbox" ng-model="story.sharable" class="js-switch" ui-switch="{color: '#4697ce', secondaryColor: '#c5cbd1'}" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">App Only</label>
+      <div class="col-sm-9">
+        <input type="checkbox" ng-model="story.appOnly" class="js-switch" ui-switch="{color: '#4697ce', secondaryColor: '#c5cbd1'}" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Enabled</label>
+      <div class="col-sm-9">
+        <input type="checkbox" ng-model="story.enabled" class="js-switch" ui-switch="{color: '#4697ce', secondaryColor: '#c5cbd1'}" />
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="close()">Cancel</button>
+  <button class="btn btn-primary" ng-click="saveStoryDo()"  ng-disabled="!canSubmitValidationForm()||isSaving">
+    <span ng-show="isSaving"><i class="fa fa-spinner fa-spin"></i> Saving...</span>
+    <span ng-hide="isSaving" class="">Save Story</span>
+  </button>
+</div>

@@ -1,0 +1,129 @@
+<div class="container-fluid" ng-controller="TeamController">
+  <div class="row">
+    <div class="col-md-12">
+      <panel panel-class="panel-default">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="pull-left">
+              <h2 >Teams ({{collectionView.totalItems}})</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-md-4">
+            <div class="input-icon right mb10">
+              <i class="fa fa-search"></i>
+              <input type="text" ng-model="collectionView.searchTerm" class="form-control" placeholder="Search" ng-enter="onSearch()">
+            </div>
+          </div>
+          <div class="col-md-8 text-right">
+            <button class="btn btn-default2 pull-right" ng-click="createTeam()"><i class="fa fa-plus"></i>&nbsp;Add Team</button>
+            <button class="btn btn-default2 pull-right" ng-click="consolidate()" style="color:orange !important;border-color: orange !important;margin-right:10px">Consolidate Discharges</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th><a href="#" class="userlist-header" ng-click="sortColumn(0, $event)">Team Name<span ng-if="sortDir[0]==-1">&nbsp;&#9660;</span><span ng-if="sortDir[0]==1">&nbsp;&#9650;</span></a></th>
+                <th class="text-center" style="width:12%"><a href="#" class="userlist-header" ng-click="sortColumn(5, $event)">Enterprise List<span ng-if="sortDir[5]==-1">&nbsp;&#9660;</span><span ng-if="sortDir[5]==1">&nbsp;&#9650;</span></a></th>
+                <th class="text-center" style="width:12%"><a href="#" class="userlist-header" ng-click="sortColumn(1, $event)">Outpatient List<span ng-if="sortDir[1]==-1">&nbsp;&#9660;</span><span ng-if="sortDir[1]==1">&nbsp;&#9650;</span></a></th>
+                <th class="text-center" style="width:12%"><a href="#" class="userlist-header" ng-click="sortColumn(2, $event)">Discharged<span ng-if="sortDir[2]==-1">&nbsp;&#9660;</span><span ng-if="sortDir[2]==1">&nbsp;&#9650;</span></a></th>
+                <th class="text-center" style="width:10%"><a href="#" class="userlist-header" ng-click="sortColumn(3, $event)">Census<span ng-if="sortDir[3]==-1">&nbsp;&#9660;</span><span ng-if="sortDir[3]==1">&nbsp;&#9650;</span></a></th>
+                <th class="text-center" style="width:12%"><a href="#" class="userlist-header" ng-click="sortColumn(4, $event)">Admin<span ng-if="sortDir[4]==-1">&nbsp;&#9660;</span><span ng-if="sortDir[4]==1">&nbsp;&#9650;</span></a></th>
+                <th style="width:20%"></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="item in teamList">
+                <td><input type="text" class="form-control" ng-model="item.serviceName" style="width:100%;" ng-change="updateTeam(item)"></td>
+                <td class="text-center">
+                  <img style="width:26px;" src="assets/img/Checkbox-Complete.png" ng-if="item.isOrgService" ng-click="toggleOrgService(item, $event)">
+                  <img style="width:26px;" src="assets/img/Checkbox.png"  ng-if="!item.isOrgService" ng-click="toggleOrgService(item, $event)">
+                </td>
+                <td class="text-center">
+                  <img style="width:26px;" src="assets/img/Checkbox-Complete.png" ng-if="item.isOutpatient" ng-click="toggleOutpatient(item, $event)">
+                  <img style="width:26px;" src="assets/img/Checkbox.png"  ng-if="!item.isOutpatient" ng-click="toggleOutpatient(item, $event)">
+                </td>
+                <td class="text-center">
+                  <img style="width:26px;" src="assets/img/Checkbox-Complete.png" ng-if="item.isDischargeService" ng-click="toggleDischarge(item, $event)">
+                  <img style="width:26px;" src="assets/img/Checkbox.png"  ng-if="!item.isDischargeService" ng-click="toggleDischarge(item, $event)">
+                </td>
+                <td class="text-center">{{item.patientsCount}}</td>
+                <td class="text-center">{{item.adminName}}</td>
+                <td class="text-right">
+                  <button class="btn btn-sm btn-setting" ng-click="editTeam(item, $event)">Settings</button>
+                  <button class="btn btn-sm btn-delete" ng-click="deleteTeam(item, $event)">Delete</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-md-2">
+                <select style="height:28px;width:60px;padding-top:4px;" ng-model="collectionView.itemsPerPage" ng-change="onPageChange()" class="form-control pull-left">
+                  <option value=10>10</option>
+                  <option value=15>15</option>
+                  <option value=20>20</option>
+                  <option value=25>25</option>
+                  <option value=50>50</option>
+                  <option value=100>100</option>
+                </select>
+                <span class="pull-left" style="padding:6px"> Teams/Page</span>
+              </div>
+              <div class="col-md-8 text-center">
+                <pagination class="mb5 pagination-sm" items-per-page="collectionView.itemsPerPage" total-items="collectionView.totalItems" ng-model="collectionView.currentPage" max-size="10" ng-change="onPageChange()"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </panel>
+    </div>
+    <div data-ng-show="isLoading" style="width: 100%; height: 100%; position: absolute; top:0; left:0; background-color:rgba(255,255,255,0.4);text-align: center;">
+      <div style="background-color: rgba(255,255,255,0.7); margin: 3px;">
+        <p><i class="fa fa-spinner fa-spin"></i> Loading...</p>
+      </div>
+    </div>
+  </div>
+  <script type="text/ng-template" id="createService.html">
+    <div class="modal-header">
+      <h3 class="modal-title">New Team</h3>
+    </div>
+    <div class="modal-body">
+      <form action="" class="form-horizontal row-border" name="form.validateForm">
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Team Name</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" ng-model="serviceName" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6">
+            <div class="checkbox">
+              <label>
+                <input icheck type="checkbox" value="" ng-model="colleaguesMayInvite">
+                Colleagues May Invite
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6">
+            <div class="checkbox">
+              <label>
+                <input icheck type="checkbox" value="" ng-model="isOutpatient">
+                Outpatient List
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-info" ng-click="createServiceDo()" ng-disabled="!canSubmitValidationForm()">Save</button>
+      <button class="btn btn-pink-alt" ng-click="close()">Cancel</button>
+    </div>
+  </script>
+</div> <!-- container-fluid -->

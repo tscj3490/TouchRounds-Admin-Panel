@@ -1,0 +1,31 @@
+<div class="verticalcenter" ng-controller="SigninController">
+  <a href="http://www.touchrounds.com/"><img src="assets/img/logo_large.png" alt="Logo" class="brand" /></a>
+	<div class="panel panel-primary">
+		<div class="panel-body">
+      <h4 class="text-center" style="margin-bottom: 25px;">Administrator Control Panel</h4>
+			<form action="#" class="form-horizontal" autocomplete="false">
+        <div class="form-group">
+          <div class="col-sm-12">
+            <input type="text" class="form-control" placeholder="Organization code" ng-model="user.orgCode" ng-enter="submitForm()"  spellcheck="false" ng-change="hasError=false" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <input type="text" class="form-control" placeholder="E-mail" ng-model="user.username" ng-enter="submitForm()"  spellcheck="false" ng-change="hasError=false" autocomplete="off">
+          </div>
+        </div>
+				<div class="form-group">
+					<div class="col-sm-12">
+						<input type="password" class="form-control" placeholder="Password" ng-model="user.password" ng-enter="submitForm()" ng-change="hasError=false" autocomplete="new-password">
+					</div>
+				</div>
+        <div class="form-group" ng-if="hasError">
+          <div class="col-md-12" style="text-align: center">
+            <p class="help-block red">{{errorMessage}}</p>
+          </div>
+        </div>
+				<a href="#/" class="btn btn-primary btn-block btn-login"  ng-click="submitForm()">LOG IN</a>
+			</form>
+		</div>
+	</div>
+ </div>

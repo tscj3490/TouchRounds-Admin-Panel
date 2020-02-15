@@ -1,0 +1,141 @@
+<div ng-controller="TeamEditController">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12" style="padding-top:20px">
+        <div class="content-title">
+          Settings
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="panel panel-default" style="padding:25px 15px 15px 15px;">
+              <div class="row">
+                <div class="col-sm-6">
+                  <form action="" class="form-horizontal row-border" >
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <input type="text" class="form-control hover-text" ng-model="team.serviceName" ng-change="changeTeamName();" style="border-width:1px !important;">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-sm-6" style="padding-top:5px">
+                  <a class="btn btn-patient pull-right btn-patient-save" href="#/teams">Save</a>
+                  <button class="btn btn-patient btn-patient-delete pull-right" ng-click="deleteService()" ng-show="isAdmin" style="margin-left: 10px;margin-right: 10px;">Delete Team</button>
+                  <!--<button class="btn btn-patient btn-patient-discharge pull-right" ng-click="leaveService()" ng-show="showLeaveButton">Leave Team</button>-->
+                  <span ng-if="!team.isDischargeService&&isAdmin" class="pull-right" style="padding-top: 5px;margin-right: 40px;"><input icheck type="checkbox" ng-model="isOutpatient" ng-change="setOutPatient()"><label class="control-label">&nbsp;&nbsp;&nbsp;Outpatient List</label></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <panel panel-class="panel-default" data-heading="Members">
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Email</th>
+                  <th class="text-center">Admin</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="member in admins" ng-click="selectMember(member)" style="cursor: pointer;">
+                  <td>{{member.lastName}}, {{member.firstName}}</td>
+                  <td>{{getRoleName(member.role)}}</td>
+                  <td>{{member.username}}</td>
+                  <td class="text-center"><img style="width:26px;" src="assets/img/Checkbox-Complete.png"></td>
+                </tr>
+                <tr ng-repeat="member in members" ng-click="selectMember(member)" style="cursor: pointer;">
+                  <td>{{member.lastName}}, {{member.firstName}}</td>
+                  <td>{{getRoleName(member.role)}}</td>
+                  <td><span>{{member.username}}</span></td>
+                  <td class="text-center"><img style="width:26px;" src="assets/img/Checkbox.png"></td>
+                  <td><button class="btn btn-sm btn-red-alt pull-right" ng-click="deleteMember(member)" ng-if="isAdmin">Remove</button></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </panel>
+      </div>
+      <div class="col-md-5">
+        <panel panel-class="panel-default" data-heading="Invitations">
+          <panel-controls ng-if="isAdmin||team.colleaguesMayInvite">
+            <button class="btn btn-patient btn-patient-edit pull-right" ng-click="invite()" style="margin-top: 10px">Invite Colleagues</button>
+          </panel-controls>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Email</th>
+                  <th><div class="pull-right" ng-if="isAdmin"><input icheck type="checkbox" ng-model="mayInvite" ng-change="setMayInvite()">&nbsp;&nbsp;&nbsp;Colleagues May Invite Others</div></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="member in invitations" style="cursor: pointer;">
+                  <td colspan="2">
+                    <div style="padding-top:4px;float: left">{{member.userEmail}}</div>
+                    <button class="btn btn-sm btn-red-alt pull-right" ng-click="cancelInvite(member)" ng-if="isAdmin">Cancel</button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </panel>
+      </div>
+      <div data-ng-show="isLoading" style="width: 100%; height: 100%; position: absolute; top:0; left:0; background-color:rgba(255,255,255,0.4);text-align: center;">
+        <div style="background-color: rgba(255,255,255,0.7); margin: 3px;">
+          <p><i class="fa fa-spinner fa-spin"></i> Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/ng-template" id="selectAdmin.html">
+      <div class="modal-header">
+        <h3 class="modal-title">Before you leave...</h3>
+      </div>
+      <div class="modal-body">
+        <p>Please choose a new administrator for this team from the member list.</p>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Members</label>
+            <div class="col-sm-6">
+              <select class="form-control" ng-model="form.member" ng-options="getFullName(member) for member in members track by member._id"></select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="leaveServiceDo()">Leave</button>
+        <button class="btn btn-warning" ng-click="close()">Cancel</button>
+      </div>
+    </script>
+    <script type="text/ng-template" id="inviteForm.html">
+      <div class="modal-header">
+        <h3 class="modal-title">Invite Colleagues</h3>
+      </div>
+      <div class="modal-body">
+        <p>Enter an email address</p>
+        <form class="form-horizontal" name="form.validateForm">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-6">
+              <input type="email" class="form-control" ng-model="form.email" required placeholder="Enter email address" spellcheck="false">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-patient-save" ng-click="inviteDo()" ng-disabled="!canSubmitValidationForm()">Invite</button>
+        <button class="btn btn-red-alt" ng-click="close()">Cancel</button>
+      </div>
+    </script>
+  </div> <!-- container-fluid -->
+</div>

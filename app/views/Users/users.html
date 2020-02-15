@@ -1,0 +1,111 @@
+<div class="container-fluid" ng-controller="UserController">
+  <div class="row">
+    <div class="col-md-12">
+      <panel panel-class="panel-default">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="pull-left">
+              <h2 ng-if="globals.isAdmin">Users&nbsp;<span style="font-size:20px">({{collectionView.totalItems}})</span></h2>
+              <h2 ng-if="!globals.isAdmin">Users&nbsp;<span style="font-size:20px">({{org.usersCount}} of {{org.slotsCount}})</span></h2>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="padding-bottom: 10px;">
+          <div class="col-md-4">
+            <div class="input-icon right mb10">
+              <i class="fa fa-search"></i>
+              <input type="text" ng-model="collectionView.searchTerm" class="form-control" placeholder="Search" ng-enter="onSearch()">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <select ng-model="collectionView.searchRole" class="form-control" placeholder="Select a role" ng-change="onSearch()" ng-options="CommonUtil.getRoleName(role) for role in CommonUtil.roleList track by role">
+              <option value="">Filter by Role</option>
+            </select>
+          </div>
+          <div class="col-md-3" >
+            <select  ng-if="globals.isAdmin" ng-model="collectionView.searchPlan" class="form-control" ng-change="onSearch()"  ng-options="CommonUtil.getSubscriptionTypeName(plan) for plan in CommonUtil.planList track by plan">
+              <option value="">Filter by Subscription</option>
+            </select>
+          </div>
+          <div class="col-md-2 text-right">
+            <button class="btn btn-default2 pull-right" ng-click="createUser()"><i class="fa fa-plus"></i>&nbsp;Invite User</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th><a class="userlist-header" href="#" ng-click="sortToggle(['lastName', 'firstName'], 0, $event)">Name</a>&nbsp;<span class="sort-dir sort-dir-0"></span></th>
+                <th><a class="userlist-header" href="#" ng-click="sortToggle(['username'], 1, $event)">Email</a>&nbsp;<span class="sort-dir sort-dir-1"></span></th>
+                <th><a class="userlist-header" href="#" ng-click="sortToggle(['role'], 2, $event)">Role</a>&nbsp;<span class="sort-dir sort-dir-2"></span></th>
+                <th  ng-if="globals.isAdmin"><a class="userlist-header" href="#" ng-click="sortToggle(['subscriptionType'], 3, $event)">Subscription Type</a>&nbsp;<span class="sort-dir sort-dir-3"></span></th>
+                <th ng-hide="globals.isAdmin" class="text-center"><a class="userlist-header" href="#" ng-click="sortToggle(['isOrgAdmin'], 7, $event)">Admin</a>&nbsp;<span class="sort-dir sort-dir-7"></span></th>
+                <th class="text-center"><a class="userlist-header" href="#" ng-click="sortToggle(['_bmd.createdAt'], 4, $event)">Created At</a>&nbsp;<span class="sort-dir sort-dir-4"></span></th>
+                <th ng-if="globals.isAdmin" class="text-center"><a class="userlist-header" href="#" ng-click="sortToggle(['expirationDate'], 6, $event)">Expiration Date</a>&nbsp;<span class="sort-dir sort-dir-6"></span></th>
+                <th class="text-center"><a class="userlist-header" href="#" ng-click="sortToggle(['lastLoginAt'], 5, $event)">Last Login</a>&nbsp;<span class="sort-dir sort-dir-5"></span></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="item in userList" ng-click="editUser(item)" style="cursor: pointer;">
+                <td>{{CommonUtil.getFullName(item)}}</td>
+                <td>{{item.username}}</td>
+                <td>{{CommonUtil.getRoleName(item.role)}}</td>
+                <td  ng-if="globals.isAdmin">{{CommonUtil.getSubscriptionTypeName(item.subscriptionType)}}</td>
+                <td ng-hide="globals.isAdmin" class="text-center">
+                  <img style="width:26px;" src="assets/img/Checkbox-Complete.png" ng-if="item.isOrgAdmin" ng-click="toggleAdmin(item, $event)">
+                  <img style="width:26px;" src="assets/img/Checkbox.png"  ng-if="!item.isOrgAdmin" ng-click="toggleAdmin(item, $event)">
+                </td>
+                <td class="text-center"><nobr>{{CommonUtil.formatDateWithFormat(item._bmd.createdAt, 'MM/DD/YY HH:mm')}}</nobr></td>
+                <td ng-if="globals.isAdmin" class="text-center"><nobr>{{CommonUtil.formatDateWithFormat(item.expirationDate, 'MM/DD/YY HH:mm')}}</nobr></td>
+                <td class="text-center"><nobr>{{CommonUtil.formatDateWithFormat(item.lastLoginAt, 'MM/DD/YY HH:mm')}}</nobr></td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-md-2">
+                <select style="height:28px;width:60px;padding-top:4px;" ng-model="collectionView.itemsPerPage" ng-change="onPageChange()" class="form-control pull-left">
+                  <option value=10>10</option>
+                  <option value=15>15</option>
+                  <option value=20>20</option>
+                  <option value=25>25</option>
+                  <option value=50>50</option>
+                  <option value=100>100</option>
+                </select>
+                <span class="pull-left" style="padding:6px"> Users/Page</span>
+              </div>
+              <div class="col-md-8 text-center">
+                <pagination class="mb5 pagination-sm" items-per-page="collectionView.itemsPerPage" total-items="collectionView.totalItems" ng-model="collectionView.currentPage" max-size="10" ng-change="onPageChange()"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </panel>
+    </div>
+    <div data-ng-show="isLoading" style="width: 100%; height: 100%; position: absolute; top:0; left:0; background-color:rgba(255,255,255,0.4);text-align: center;">
+      <div style="background-color: rgba(255,255,255,0.7); margin: 3px;">
+        <p><i class="fa fa-spinner fa-spin"></i> Loading...</p>
+      </div>
+    </div>
+    <script type="text/ng-template" id="inviteForm.html">
+      <div class="modal-header">
+        <h3 class="modal-title">Invite User</h3>
+      </div>
+      <div class="modal-body">
+        <p>Enter an e-mail address</p>
+        <form class="form-horizontal" name="form.validateForm">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">E-mail</label>
+            <div class="col-sm-6">
+              <input type="email" class="form-control" ng-model="form.email" required placeholder="Enter e-mail address" spellcheck="false">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-red-alt" ng-click="close()">Cancel</button>
+        <button class="btn btn-touchrounds btn-save" ng-click="inviteDo()" ng-disabled="!canSubmitValidationForm()">Invite</button>
+      </div>
+    </script>
+  </div>
+</div> <!-- container-fluid -->

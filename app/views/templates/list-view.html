@@ -1,0 +1,97 @@
+<div>
+	<div ng-show="params.isInitializing()" ng-style="styleForOverlay()" style="width: 100%; height: 100%; position: absolute; top:0; left:0; background-color:rgba(255,255,255,0.4);text-align: center;">
+		<span><i class="fa fa-spinner fa-spin"></i> Loading...</span>
+	</div>
+	<div class="row">
+        <div class="col-md-12">
+        	<div style="height: 200px;" ng-show="!items.length && params.isInitializing()"></div>
+			<table class="table table-hover">
+				<thead ng-hide="!items.length || params.hideHeader">
+				<tr>
+				<th ng-repeat="column in getColumns()" ng-hide="column.hidden || column.isHidden(item)">{{column.header ? column.header : column.name}}<i ng-show="filter.sortBy==column.name" ng-class="{'fa fa-caret-down pull-right': filter.ascending, 'fa fa-caret-up pull-right': !filter.ascending}"></i></th>
+				</tr>
+				</thead>
+				<tr ng-show="!params.isInitializing() && items.length<1 && params.emptyText">
+					<td colspan="{{columns.length}}" style="text-align: center; height: 54px;"><h4 style="text-align: center;line-height: 100px;"><i>{{params.emptyText}}</i></h4></td>
+				</tr>
+				<tbody ng-model="items">
+					<tr class="challenge-row" ng-repeat="item in items track by item._id">
+						<td ng-repeat="column in getColumns()" class="{{column.cellClass}}" ng-click="params.getUrl(item) && column.type!='actions' && column.type!='link' && column.type!='editable' ? go($event, params.getUrl(item)) : ( column.type!='actions' ? params.onClick(item) : false);" ng-hide="column.hidden || column.isHidden(item)" ng-style="column.style">
+
+							<div class="{{column.divClass}}" ng-if="column.type=='index'">{{($parent.$parent.$index)+1}}</div>
+
+							<div class="{{column.divClass}}" ng-if="column.type=='fileUploadProgress'">
+								<a class="file-name" ng-href="{{item.blob && item.blob._file ? item.blob._file._downloadUrl : (item.blob ? item.blob._downloadUrl : null)}}" target="_blank">{{column.filename(item)}}</a>
+								<div class="upload-progress" ng-show="column.shouldShowProgress(item)">
+									<progressbar ng-class="column.progressClass(item)" value="column.progressValue(item)" type="danger" animate="true"></progressbar>
+									<p class="progress-label">{{column.progressLabel(item)}}</p>
+								</div>
+							</div>
+							<div class="{{column.divClass}}" ng-if="column.type=='thumbnail'">
+								<div class="challenge-thumbnail-container">
+									<div class="challenge-thumbnail" ng-style="column.thumbnail(item)"></div>
+								</div>
+								<div class="hoverable-content challenge-title-text">{{column.value(item)}}</div>
+							</div>
+							<div class="{{column.divClass}}" ng-if="column.type=='labelsList'">
+								<div class="hoverable-content" style="padding-left: 3px;" ng-hide="column.value(item) && column.value(item).length > 0">N/A</div>
+								<ul ng-show="column.value(item) && column.value(item).length > 0">
+									<li ng-repeat="val in column.value(item)">{{val}}</li>
+								</ul>
+							</div>
+							<div class="hoverable-content cell-no-wrap handle" ng-if="column.type=='sortHandle'">
+								<i class="fa fa-bars"></i> {{ column.value(item)}}
+							</div>
+
+							<div class="hoverable-content cell-no-wrap handle" ng-if="column.type=='dragBar'">
+								<div class="list-cell index-bar">{{($parent.$parent.$index)+1}}</div>
+                                <div class="list-cell drag-bar"></div>
+							</div>
+
+
+							<div class="{{column.divClass}}" ng-if="column.type=='actions'">
+								<button ng-repeat="button in column.buttons" ng-click="button.onClick(item)" class="btn btn-{{button.size ? button.size : 'sm'}} btn-{{button.type}}" ng-disabled="button.isDisabled(item)"><i class="fa fa-{{button.icon}}"></i> {{button.title}}</button>
+							</div>
+							<div class="{{column.divClass}}" ng-if="column.type=='link'" ng-click="go($event, column.url(item), column.clearSearch)" ng-show="column.value(item) !==undefined">
+								{{ column.value(item)}}
+							</div>
+							<div class="{{column.divClass}}" ng-if="column.type=='raw'" ng-bind-html="column.value(item)"></div>
+							<div class="{{column.divClass}}" ng-if="column.type=='json'" ng-show="column.value(item) !==undefined">
+								<pre class="code" style="margin-bottom: 0px;">{{ column.value(item) | json }}</pre>
+							</div>
+							<div class="{{column.divClass}}" ng-if="column.type=='editable'">
+
+								<!-- EDITABLE FIELDS -->
+								<a ng-if="column.editable.getType(item)=='text'" ng-show="column.editable.getType(item)=='text'" editable-text="column.value(item)" e-name="{{column.type}}" onbeforesave="column.editable.save($data, item)">{{ column.value(item) || column.editable.emptyText }}</a>
+								<a ng-if="column.editable.getType(item)=='select'" ng-show="column.editable.getType(item)=='select'" editable-select="column.value(item)" e-name="{{column.type}}" onbeforesave="column.editable.save($data, item)" e-ng-options="s.value as s.text for s in column.editable.data">{{ column.editable.showValue(item)}}</a>
+								<a ng-if="column.editable.getType(item)=='textarea'" ng-show="column.editable.getType(item)=='textarea'" editable-textarea="column.value(item)" e-name="{{column.type}}" onbeforesave="column.editable.save($data, item)" e-rows="7" e-cols="40">{{ column.value(item) || column.editable.emptyText }}</a>
+
+								<div ng-if="column.editable.getType(item)=='file'" ng-show="column.editable.getType(item)=='file'">
+									<a target="_blank" ng-href="{{item.blob._file._downloadURL}}" ng-show="item.blob._file">{{item.blob._file._filename}}</a>
+									<button ng-click="column.editable.onUploadClick(item)" class="btn btn-sm btn-primary"><i class="fa fa-upload"></i><!-- {{item.blob._file ? 'Change' : 'Upload'}}--></button>
+								</div>
+
+								<div ng-if="column.editable.getType(item)=='json'" ng-show="column.editable.getType(item)=='json'">
+									<button ng-click="column.editable.onJsonClick(item)" class="btn btn-sm btn-primary"><i class="fa fa-code"></i></button>
+								</div>
+
+
+							</div>
+							<div class="{{column.divClass}}" ng-if="column.type=='label'" ng-show="column.value(item) !==undefined">
+								<span class="{{column.getItemClass(item)}}">
+                                    <strong>{{column.value(item)}}</strong>
+                                </span>
+							</div>
+
+							<div class="{{column.divClass}}" ng-if="column.type=='toggleSwitch'" ng-show="column.value(item)!==undefined">
+								<toggle-switch-with-events model="item[column.name]" class="success" on-label="YES" off-label="NO" on-toggle="column.onToggle(item)"></toggle-switch-with-events>
+							</div>
+
+							<div class="{{column.divClass}}" ng-if="!column.type || column.type=='default'">{{ column.value(item)}}</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
